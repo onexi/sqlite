@@ -1,0 +1,38 @@
+import sqlite3
+import os
+
+
+#check if database exists
+if os.path.exists('club.db'):
+    # delete the database if it exists
+    os.remove('club.db')
+
+
+#connect to the database
+connection = sqlite3.connect('club.db')
+
+# create a cursor
+cursor = connection.cursor()
+
+# create a table
+rows = cursor.execute("CREATE TABLE members (firstname, lastname, email)")
+
+#verify the table was created
+rows = cursor.execute("SELECT * FROM sqlite_master").fetchall()
+print(rows)
+
+#write data to the table
+cursor.execute('''INSERT INTO members VALUES 
+    ('peter', 'parker', 'peter@mit.edu'),
+    ('bruce', 'wayne', 'bruce@mit.edu'),
+    ('tony', 'stark', 'tony@mit.edu')
+''')
+
+#commit the changes
+connection.commit()
+
+rows = cursor.execute("SELECT * FROM members").fetchall()
+print(rows)
+
+#close the connection
+connection.close()
